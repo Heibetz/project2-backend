@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 const dbConfig = require('../routes/db.config.js');
 
+
 // Create a connection pool using the config
 const pool = mysql.createPool({
   connectionLimit: dbConfig.pool.max,
