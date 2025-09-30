@@ -1,4 +1,5 @@
-const pool = require('./config/db');
+const mariadb = require('mariadb');
+const dbConfig = require('./app/config/db.config');
 
 pool.query('SELECT 1 + 1 AS two', (err, rows) => {
   if (err) {

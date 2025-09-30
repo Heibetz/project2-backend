@@ -4,7 +4,13 @@ require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+var logger = require('morgan');
+var cors = require('cors');
+var http = require('http');
+var db = require('./app/models');
 var cookieParser = require('cookie-parser');
+var indexRouter = require('./app/routes/index');
+var coursesRouter = require('./app/routes/courses');
 var logger = require('morgan');
 const cors = require('cors');
 
@@ -19,6 +25,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -28,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({ origin: ['http://localhost:5173','http://127.0.0.1:5173'] }));
 
 app.use('/', indexRouter);
+app.use('/api/courses', coursesRouter);
 app.use('/users', usersRouter);
 app.use('/api/courses', coursesRouter);
 
@@ -41,7 +49,6 @@ app.get('/api/health', (req, res) => {
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -52,5 +59,24 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// Start server if run directly (not when imported)
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  (async () => {
+    try {
+      await db.sequelize.authenticate();
+      // Do not force sync; assumes tables already exist
+      await db.sequelize.sync();
+      app.set('port', PORT);
+      http.createServer(app).listen(PORT, () => {
+        console.log(`Server listening on http://localhost:${PORT}`);
+      });
+    } catch (err) {
+      console.error('Failed to start server:', err);
+      process.exit(1);
+    }
+  })();
+}
 
 module.exports = app;
