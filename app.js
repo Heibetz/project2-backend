@@ -1,6 +1,3 @@
-// Load environment variables from .env
-require('dotenv').config();
-
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -11,12 +8,6 @@ var db = require('./app/models');
 var cookieParser = require('cookie-parser');
 var indexRouter = require('./app/routes/index');
 var coursesRouter = require('./app/routes/courses');
-var logger = require('morgan');
-const cors = require('cors');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var coursesRouter = require('./routes/courses');
 
 var app = express();
 
@@ -31,19 +22,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Enable CORS for frontend (Vite runs on 5173 by default)
-app.use(cors({ origin: ['http://localhost:5173','http://127.0.0.1:5173'] }));
-
 app.use('/', indexRouter);
 app.use('/api/courses', coursesRouter);
-app.use('/users', usersRouter);
-app.use('/api/courses', coursesRouter);
-
-
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ ok: true, time: new Date().toISOString() });
-});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
