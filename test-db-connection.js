@@ -1,5 +1,5 @@
 const mariadb = require('mariadb');
-const dbConfig = require('./routes/db.config');
+const dbConfig = require('./app/config/db.config');
 
 async function testConnection() {
   let conn;
