@@ -4,10 +4,10 @@ var path = require('path');
 var logger = require('morgan');
 var cors = require('cors');
 var http = require('http');
-var db = require('./.github/workflows/app/models');
+var db = require('./app/models');
 var cookieParser = require('cookie-parser');
-var indexRouter = require('./.github/workflows/app/routes/index');
-var coursesRouter = require('./.github/workflows/app/routes/courses');
+var indexRouter = require('./app/routes/index');
+var coursesRouter = require('./app/routes/courses');
 
 var app = express();
 
