@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "bundle": "rm -rf deploy && mkdir -p deploy/app/config deploy/app/controllers deploy/app/models deploy/app/routes deploy/views && cp app.js package.json course-backend.service deploy/ && cp -r app/config/* deploy/app/config/ && cp -r app/controllers/* deploy/app/controllers/ && cp -r app/models/* deploy/app/models/ && cp -r app/routes/* deploy/app/routes/ && cp -r views/* deploy/views/"
   },
   "dependencies": {
     "body-parser": "^2.2.0",
