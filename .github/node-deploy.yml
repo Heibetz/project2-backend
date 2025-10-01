@@ -9,6 +9,12 @@ on:
 jobs:
   aws-deploy:
     runs-on: ubuntu-latest
+    env:
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PW: ${{ secrets.DB_PW}}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_NAME: ${{ secrets.DB_NAME }}
+        PORT: ${{ secrets.PORT }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -17,6 +23,18 @@ jobs:
         with:
           node-version: "20"
       - run: npm install
+      - run: |
+          touch .env
+          echo DB_HOST = "$DB_HOST" >> .env
+          echo DB_PW = "$DB_PW" >> .env
+          echo DB_USER = "$DB_USER" >> .env
+          echo DB_NAME = "$DB_NAME" >> .env
+          echo PORT = "$PORT" >> .env
+          echo DB_DIALECT = "mysql" >> .env
+          echo DB_POOL_MAX = "5" >> .env
+          echo DB_POOL_MIN = "0" >> .env
+          echo DB_POOL_ACQUIRE = "30000" >> .env
+          echo DB_POOL_IDLE = "10000" >> .env
       - run: npm run bundle
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
@@ -26,7 +44,7 @@ jobs:
           SOURCE: "deploy/"
           REMOTE_HOST: "project2.eaglesoftwareteam.com"
           REMOTE_USER: ubuntu
-          TARGET: "nodeapps/2024/project2/t5"
+          TARGET: "nodeapps/2025/project2/t5"
       - name: Execute SSH commmands on remote server
         uses: JimCronqvist/action-ssh@master
         env:
@@ -36,9 +54,9 @@ jobs:
           privateKey: ${{ secrets.SERVER_SSH_KEY }}
           debug: false
           command: |
-            cd nodeapps/2024/project2/t5
+            cd nodeapps/2025/project2/t5
             npm install
-            sudo systemctl stop course-backend-t5
-            sudo cp course-backend.service /lib/systemd/system/course-backend-t5.service
+            sudo systemctl stop course-t5-backend
+            sudo cp course-t5-backend.service /lib/systemd/system/course-t5-backend.service
             sudo systemctl daemon-reload
-            sudo systemctl start course-backend-t5
+            sudo systemctl start course-t5-backend

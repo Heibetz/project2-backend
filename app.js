@@ -4,10 +4,10 @@ var path = require('path');
 var logger = require('morgan');
 var cors = require('cors');
 var http = require('http');
-var db = require('./app/models');
+var db = require('./.github/workflows/app/models');
 var cookieParser = require('cookie-parser');
-var indexRouter = require('./app/routes/index');
-var coursesRouter = require('./app/routes/courses');
+var indexRouter = require('./.github/workflows/app/routes/index');
+var coursesRouter = require('./.github/workflows/app/routes/courses');
 
 var app = express();
 
@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/api/courses', coursesRouter);
+app.use('/courses-t5/courses', coursesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
