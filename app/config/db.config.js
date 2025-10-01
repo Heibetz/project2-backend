@@ -33,9 +33,9 @@ const _base = module.exports || {};
 module.exports = {
   ..._base,
   HOST: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
+  port: Number(process.env.PORT),
   USER: process.env.DB_USER,
-  PASSWORD: process.env.DB_PASSWORD,
+  PASSWORD: process.env.DB_PW,
   DB: process.env.DB_NAME,
   dialect: process.env.DB_DIALECT,
   pool: {
